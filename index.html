@@ -7,7 +7,8 @@
     <link rel="shortcut icon" href="images/favicon.ico">
   </head>
   <body>
-    <button class="enable-push-button" disabled>Enable Push Notifications</button>
+    <button class="enable-push-button" disabled>Enable Push Notifications</button><br/><br/>
+    <textarea class="curl-cmd-textarea" rows="10" cols="50"></textarea>
 
     <script>
     var isPushEnabled = false;
@@ -34,6 +35,10 @@
 
     function sendSubscriptionToServer(subscription) {
       console.log(subscription);
+
+      var textArea = document.querySelector('.curl-cmd-textarea');
+
+      textArea.value = 'curl --header "Authorization: key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\"registration_ids\":[\"' + subscription.subscriptionId + \"]}"';
     }
 
     // Once the service worker is registered set the initial state
