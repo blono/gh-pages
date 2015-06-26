@@ -27,15 +27,33 @@
 
       var sendPushButton = document.querySelector('.send-push-button');
       sendPushButton.addEventListener('click', function() {
-        var xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.open('POST', 'https://android.googleapis.com/gcm/send', true);
+        /*var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open('POST', 'https://yano-proxy.appspot.com/android/gcm/send', true);
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        xmlHttpRequest.setRequestHeader('Authorization', 'AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk');
+        xmlHttpRequest.setRequestHeader('Authorization', 'key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk');
         xmlHttpRequest.send(JSON.stringify({
-          registration_ids: [''],
+          registration_ids: [registrationId],
           data: {
           }
-        }));
+        }));*/
+        fetch('https://yano-proxy.appspot.com/android/gcm/send', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk'
+          },
+          body: JSON.stringify({
+            registration_ids: [registrationId],
+            data: {
+            }
+          })
+        }).then(function(response) {
+          console.log(response.status);
+
+          return response.json();
+        }).then(function(json) {
+          console.log(json);
+        });
       });
 
       new MutationObserver(function(records) {
@@ -60,8 +78,6 @@
     });
 
     function sendSubscriptionToServer(subscription) {
-      console.log(subscription);
-
       registrationId = subscription.subscriptionId;
 
       var sendPushButton = document.querySelector('.send-push-button');
