@@ -8,10 +8,12 @@
   </head>
   <body>
     <button class="enable-push-button" disabled>Enable Push Notifications</button><br/><br/>
-    <textarea class="curl-cmd-textarea" rows="10" cols="50"></textarea>
+    <button class="send-push-button">Send a Push to GCM via XHR</button><br/>
+    <textarea class="curl-cmd-textarea" rows="10" cols="50" readonly></textarea>
 
     <script>
     var isPushEnabled = false;
+    var registrationId = null;
 
     window.addEventListener('load', function() {
       var pushButton = document.querySelector('.enable-push-button');
@@ -21,6 +23,30 @@
         } else {
           subscribe();
         }
+      });
+
+      var sendPushButton = document.querySelector('.send-push-button');
+      sendPushButton.addEventListener('click', function() {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open('POST', 'https://android.googleapis.com/gcm/send', true);
+        xmlHttpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+        xmlHttpRequest.setRequestHeader('Authorization', 'AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk');
+        xmlHttpRequest.send(JSON.stringify({
+          registration_ids: [''],
+          data: {
+          }
+        }));
+      });
+
+      new MutationObserver(function(records) {
+        if (pushButton.disabled === true || pushButton.textContent.indexOf('Enable') >= 0) {
+          document.querySelector('.send-push-button').disabled = true;
+          document.querySelector('.curl-cmd-textarea').value = '';
+        }
+      }).observe(pushButton, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: ['disabled', 'textContent']
       });
 
       // Check that service workers are supported, if so, progressively
@@ -36,9 +62,13 @@
     function sendSubscriptionToServer(subscription) {
       console.log(subscription);
 
-      var textArea = document.querySelector('.curl-cmd-textarea');
+      registrationId = subscription.subscriptionId;
 
-      textArea.value = 'curl --header "Authorization: key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\"registration_ids\":[\"' + subscription.subscriptionId + \"]}"';
+      var sendPushButton = document.querySelector('.send-push-button');
+      var curlCmdTextarea = document.querySelector('.curl-cmd-textarea');
+
+      sendPushButton.disabled = false;
+      curlCmdTextarea.value = 'curl --header "Authorization: key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\\"registration_ids\\":[\\"' + registrationId + '\\"]}"';
     }
 
     // Once the service worker is registered set the initial state
