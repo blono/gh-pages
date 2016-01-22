@@ -80,6 +80,10 @@
     function sendSubscriptionToServer(subscription) {
       registrationId = subscription.subscriptionId;
 
+      if (registrationId == null) {
+        registrationId = subscription.endpoint.substring('https://android.googleapis.com/gcm/send/'.length);
+      }
+
       var sendPushButton = document.querySelector('.send-push-button');
       var curlCmdTextarea = document.querySelector('.curl-cmd-textarea');
 
@@ -164,7 +168,7 @@
               // means we failed to subscribe and the user will need
               // to manually change the notification permission to
               // subscribe to push messages
-              window.Demo.debug.log('Permission for Notifications was denied');
+              console.log('Permission for Notifications was denied');
               pushButton.disabled = true;
             } else {
               // A problem occurred with the subscription, this can
@@ -176,27 +180,6 @@
             }
           });
       });
-    }
-
-    // This method handles the removal of subscriptionId
-    // in Chrome 44 by concatenating the subscription Id
-    // to the subscription endpoint
-    function endpointWorkaround(pushSubscription) {
-      // Make sure we only mess with GCM
-      if (pushSubscription.endpoint.indexOf('https://android.googleapis.com/gcm/send') !== 0) {
-        return pushSubscription.endpoint;
-      }
-
-      var mergedEndpoint = pushSubscription.endpoint;
-      // Chrome 42 + 43 will not have the subscriptionId attached
-      // to the endpoint.
-      if (pushSubscription.subscriptionId &&
-        pushSubscription.endpoint.indexOf(pushSubscription.subscriptionId) === -1) {
-        // Handle version 42 where you have separate subId and Endpoint
-        mergedEndpoint = pushSubscription.endpoint + '/' +
-          pushSubscription.subscriptionId;
-      }
-      return mergedEndpoint;
     }
 
     function unsubscribe() {
