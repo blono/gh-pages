@@ -78,10 +78,12 @@
     });
 
     function sendSubscriptionToServer(subscription) {
+      console.log(subscription);
       registrationId = subscription.subscriptionId;
 
       if (registrationId == null) {
         registrationId = subscription.endpoint.substring('https://android.googleapis.com/gcm/send/'.length);
+        console.log(registrationId);
       }
 
       var sendPushButton = document.querySelector('.send-push-button');
