@@ -30,7 +30,7 @@
         /*var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.open('POST', 'https://yano-proxy.appspot.com/android/gcm/send', true);
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        xmlHttpRequest.setRequestHeader('Authorization', 'key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk');
+        xmlHttpRequest.setRequestHeader('Authorization', 'key=ed3703345e8f0aa54207c32ae7c22036d0b32065');
         xmlHttpRequest.send(JSON.stringify({
           registration_ids: [registrationId],
           data: {
@@ -88,7 +88,7 @@
       var curlCmdTextarea = document.querySelector('.curl-cmd-textarea');
 
       sendPushButton.disabled = false;
-      curlCmdTextarea.value = 'curl --header "Authorization: key=AIzaSyDgcOhXyUJSE7alZ7P9B5tdCF-h2ZlgRAk" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\\"registration_ids\\":[\\"' + registrationId + '\\"]}"';
+      curlCmdTextarea.value = 'curl --header "Authorization: key=ed3703345e8f0aa54207c32ae7c22036d0b32065" --header Content-Type:"application/json" https://android.googleapis.com/gcm/send -d "{\\"registration_ids\\":[\\"' + registrationId + '\\"]}"';
     }
 
     // Once the service worker is registered set the initial state
