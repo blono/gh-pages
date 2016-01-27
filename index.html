@@ -177,7 +177,7 @@
               // A problem occurred with the subscription, this can
               // often be down to an issue or lack of the gcm_sender_id
               // and / or gcm_user_visible_only
-              window.Demo.debug.log('Unable to subscribe to push.', e);
+              console.log('Unable to subscribe to push.', e);
               pushButton.disabled = false;
               pushButton.textContent = 'Enable Push Notifications';
             }
